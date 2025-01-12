@@ -1,101 +1,123 @@
+'use client'
+
 import Image from "next/image";
+import { useState } from "react"
+import Image1 from "@assets/glow-spaceship.avif";
+import Image2 from "@assets/man-in-space.jpg";
+import Image3 from "@assets/some-planet.png";
+import Image4 from "@assets/shivji-image.jpg";
+import Footer from "./footer";
 
-export default function Home() {
+const Home = () => {
+
+  const [currImage, setCurrImage] = useState(1);
+  const numberOfImages = 3;
+  const showNextImage = () => {
+    const imageToDisplay = document.getElementById(`image-${(currImage % numberOfImages) + 1}`);
+    imageToDisplay?.classList.remove("hidden");
+
+    const dotToDisplay = document.getElementById(`dot-${(currImage % numberOfImages) + 1}`);
+    dotToDisplay?.classList.remove("bg-white");
+    dotToDisplay?.classList.add("bg-black");
+
+    const imageToHide = document.getElementById(`image-${currImage}`);
+    imageToHide?.classList.add("hidden");
+
+    const dotToHide = document.getElementById(`dot-${currImage}`);
+    dotToHide?.classList.remove("bg-black");
+    dotToHide?.classList.add("bg-white");
+
+    setCurrImage(num => (num % numberOfImages) + 1);
+  }
+
+  const showPrevImage = () => {
+    const imageToDisplay = document.getElementById(`image-${(currImage == 1) ? numberOfImages : (currImage - 1)}`);
+    const dotToDisplay = document.getElementById(`dot-${(currImage == 1) ? numberOfImages : (currImage - 1)}`)
+    const imageToHide = document.getElementById(`image-${currImage}`);
+    const dotToHide = document.getElementById(`dot-${currImage}`)
+
+    imageToDisplay?.classList.remove("hidden");
+    imageToHide?.classList.add("hidden");
+
+    dotToDisplay?.classList.add("bg-black");
+    dotToDisplay?.classList.remove("bg-white");
+
+    dotToHide?.classList.add("bg-white");
+    dotToHide?.classList.remove("bg-black");
+
+    setCurrImage(num => (num - 1 || numberOfImages));
+  }
+
+  const setImageFromDot = (index: number) => {
+    const imageToDisplay = document.getElementById(`image-${index}`);
+    const imageToHide = document.getElementById(`image-${currImage}`);
+
+    imageToDisplay?.classList.remove("hidden");
+    imageToHide?.classList.add("hidden");
+
+    const dotToDisplay = document.getElementById(`dot-${index}`);
+    const dotToHide = document.getElementById(`dot-${currImage}`)
+
+    dotToDisplay?.classList.add("bg-black");
+    dotToDisplay?.classList.remove("bg-white");
+    dotToHide?.classList.add("bg-white");
+    dotToHide?.classList.remove("bg-black");
+
+    setCurrImage(index);
+  }
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+    <div className="flex">
+      <div className="image" id="image-1">
         <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+          src={Image2}
+          style={{
+            width: "100vw",
+            height: "100vh",
+            minWidth: "100vw",
+            objectFit: "cover"
+          }}
+          alt="Space picture"
+        ></Image>
+      </div>
+      <div className="image hidden" id="image-2">
+        <Image
+          src={Image3}
+          style={{
+            width: "100vw",
+            height: "100vh",
+            minWidth: "100vw",
+            objectFit: "cover"
+          }}
+          alt="Space picture"
+        ></Image>
+      </div>
+      <div className="image hidden" id="image-3">
+        <Image
+          src={Image4}
+          style={{
+            width: "100vw",
+            height: "100vh",
+            minWidth: "100vw",
+            objectFit: "cover"
+          }}
+          alt="Space picture"
+        ></Image>
+      </div>
+      <button
+        className="absolute top-[46%] left-[5%] bg-black shadow-[3px_5px_18px_rgb(255,255,255,0.3)] text-white rounded-full md:py-2 md:px-5 py-1 px-3 text-xl md:text-3xl hover:bg-white hover:text-black font-[family-name:var(--font-geist-mono)]"
+        onClick={showPrevImage}
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      >&#10094;
+      </button>
+      <button
+        className="absolute top-[46%] right-[5%] bg-black shadow-[3px_5px_18px_rgb(255,255,255,0.3)] text-white rounded-full md:px-5 md:py-2 py-1 px-3 text-xl md:text-3xl hover:bg-white hover:text-black font-[family-name:var(--font-geist-mono)]"
+        onClick={showNextImage}
+      >&#10095;
+      </button>
+      <Footer count={3} handler={setImageFromDot}/>
     </div>
   );
 }
+
+export default Home;
