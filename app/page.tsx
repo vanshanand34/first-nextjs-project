@@ -12,57 +12,34 @@ const Home = () => {
 
   const [currImage, setCurrImage] = useState(1);
   const numberOfImages = 3;
-  const showNextImage = () => {
-    const imageToDisplay = document.getElementById(`image-${(currImage % numberOfImages) + 1}`);
-    imageToDisplay?.classList.remove("hidden");
 
-    const dotToDisplay = document.getElementById(`dot-${(currImage % numberOfImages) + 1}`);
-    dotToDisplay?.classList.remove("bg-white");
+  const displayHideImage = (indexToDisplay: number, indexToHide: number) => {
+    document.getElementById(`image-${indexToDisplay}`)?.classList.remove("hidden");
+    document.getElementById(`image-${indexToHide}`)?.classList.add("hidden");
+    const dotToDisplay = document.getElementById(`dot-${indexToDisplay}`);
+    const dotToHide = document.getElementById(`dot-${indexToHide}`)
+
     dotToDisplay?.classList.add("bg-black");
-
-    const imageToHide = document.getElementById(`image-${currImage}`);
-    imageToHide?.classList.add("hidden");
-
-    const dotToHide = document.getElementById(`dot-${currImage}`);
-    dotToHide?.classList.remove("bg-black");
+    dotToDisplay?.classList.remove("bg-white");
     dotToHide?.classList.add("bg-white");
+    dotToHide?.classList.remove("bg-black");
+  }
 
+
+  const showNextImage = () => {
+    displayHideImage((currImage % numberOfImages) + 1, currImage);
     setCurrImage(num => (num % numberOfImages) + 1);
   }
 
   const showPrevImage = () => {
-    const imageToDisplay = document.getElementById(`image-${(currImage == 1) ? numberOfImages : (currImage - 1)}`);
-    const dotToDisplay = document.getElementById(`dot-${(currImage == 1) ? numberOfImages : (currImage - 1)}`)
-    const imageToHide = document.getElementById(`image-${currImage}`);
-    const dotToHide = document.getElementById(`dot-${currImage}`)
-
-    imageToDisplay?.classList.remove("hidden");
-    imageToHide?.classList.add("hidden");
-
-    dotToDisplay?.classList.add("bg-black");
-    dotToDisplay?.classList.remove("bg-white");
-
-    dotToHide?.classList.add("bg-white");
-    dotToHide?.classList.remove("bg-black");
-
+    const imageToDisplay = (currImage == 1) ? numberOfImages : (currImage - 1);
+    const imageToHide = currImage;
+    displayHideImage(imageToDisplay, imageToHide);
     setCurrImage(num => (num - 1 || numberOfImages));
   }
 
   const setImageFromDot = (index: number) => {
-    const imageToDisplay = document.getElementById(`image-${index}`);
-    const imageToHide = document.getElementById(`image-${currImage}`);
-
-    imageToDisplay?.classList.remove("hidden");
-    imageToHide?.classList.add("hidden");
-
-    const dotToDisplay = document.getElementById(`dot-${index}`);
-    const dotToHide = document.getElementById(`dot-${currImage}`)
-
-    dotToDisplay?.classList.add("bg-black");
-    dotToDisplay?.classList.remove("bg-white");
-    dotToHide?.classList.add("bg-white");
-    dotToHide?.classList.remove("bg-black");
-
+    displayHideImage(index, currImage);
     setCurrImage(index);
   }
 
@@ -115,7 +92,7 @@ const Home = () => {
         onClick={showNextImage}
       >&#10095;
       </button>
-      <Footer count={3} handler={setImageFromDot}/>
+      <Footer count={3} handler={setImageFromDot} />
     </div>
   );
 }
